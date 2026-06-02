@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お申し込みフォーム</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #374151; /* より濃い灰色 (Gray 700) */
+            background-color: #ffffff; /* 背景を白色に変更 */
+            line-height: 1.6;
+        }
+        
+        /* 読み上げ中の一時的なクリーム色ハイライト */
+        .highlight {
+            background-color: #fef9c3 !important; /* Amber 100 (クリーム色) */
+            border-radius: 4px;
+        }
+
+        /* 読み上げ可能な箇所のホバー効果 */
+        .speakable {
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-radius 0.2s ease;
+            border-radius: 4px;
+            display: inline-block;
+            width: 100%;
+        }
+        .speakable:hover {
+            background-color: #fffbeb; /* Amber 50 (ホバー時極薄の黄色) */
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db; /* Gray 300 */
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #2563eb; /* Blue 600 */
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+        input.error, textarea.error, div.error {
+            border-color: #dc2626; /* 赤色 (Red 600) */
+            background-color: #fee2e2; /* Red 100 */
+        }
+        label.error {
+             color: #dc2626;
+        }
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- Custom message box for alerts and confirmations -->
+    <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
+            <!-- 読み上げ可能なクラス「speakable」を追加 -->
+            <p id="messageContent" class="text-center speakable p-1" data-speak-text=""></p>
+            <div class="flex justify-center mt-4">
+                <button onclick="hideMessageBox()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-3xl mx-auto bg-blue-100 rounded-lg shadow-md p-6 sm:p-10 space-y-4">
+        
+        <!-- Logo -->
+        <div class="flex justify-center">
+            <img src="https://i.postimg.cc/rmcCFGy7/3.png" alt="ロゴ" class="rounded-lg cursor-pointer" style="width: 150px; height: 150px; aspect-ratio: 1/1;" onerror="this.onerror=null;this.src='https://placehold.co/150x150/e0f2fe/3b82f6?text=Logo';">
+        </div>
+
+        <!-- Form Title -->
+        <div class="text-center">
+            <h1 id="form-title" class="text-2xl sm:text-3xl font-bold speakable p-1" data-speak-text="読み書きスクリーニング・語彙文法PLUS、お申し込みフォーム">【読み書きスクリーニング・語彙文法PLUS】<br>お申し込みフォーム</h1>
+        </div>
+
+        <!-- Form Description -->
+        <div>
+            <p id="form-description-1" class="text-base text-center speakable p-1" data-speak-text="こちらは、読み書きスクリーニング・語彙文法PLUS、お申し込みフォームです。文字をクリックすると文を読み上げます。">こちらは【読み書きスクリーニング・語彙文法PLUS】お申し込みフォームです。</p>
+        </div>
+
+        <!-- Informational Sections -->
+        <div class="bg-white rounded-lg p-4 space-y-2 shadow-sm">
+            <p class="text-base speakable p-1" data-speak-text="ステップ1、このお申し込みフォームを送信">①このお申し込みフォームを送信</p>
+            <p class="text-base text-center text-gray-400">↓</p>
+            <p class="text-base speakable p-1" data-speak-text="ステップ2、1週間以内に日時のお知らせと、検査内容のご提案が、実施担当予定者より届きます。">②1週間以内に日時のお知らせと検査内容のご提案が実施担当予定者より届きます。</p>
+            <p class="text-base text-center text-gray-400">↓</p>
+            <p class="text-base speakable p-1" data-speak-text="ステップ3、ステップ2のお知らせと一緒に届く別途フォームにて、お子様のお名前、当日の緊急連絡先などをお知らせいただきます。">③②のお知らせと一緒に届く別途フォームにて、お子様のお名前、当日の緊急連絡先などをお知らせいただきます。</p>
+        </div>
+
+        <div class="bg-white rounded-lg p-4 space-y-3 shadow-sm">
+            <p class="text-base font-bold speakable p-1" data-speak-text="実施担当予定者と、主な保有資格は以下です。あいうえお順。">※実施担当予定者と主な保有資格は以下です（あいうえお順）。</p>
+            <p class="text-base speakable p-1" data-speak-text="かねしろ あゆみ。公認心理師、他。">・兼城愛由美（かねしろあゆみ）：公認心理師　他</p>
+            <p class="text-base speakable p-1" data-speak-text="ふくだ あさみ。特別支援教育士、他。">・福田麻美（ふくだあさみ）：特別支援教育士　他</p>
+            <p class="text-base speakable p-1" data-speak-text="まつうら ちはる。臨床発達心理士、他。">・松浦千春（まつうらちはる）：臨床発達心理士　他</p>
+            <p class="text-base speakable p-1" data-speak-text="やまね としこ。言語聴覚士、他。">・山根壽子（やまねとしこ）：言語聴覚士　他</p>
+            <p class="text-base speakable p-1" data-speak-text="実施担当予定者の指名は承ることができません。また、当日の体調不良などにより実施担当予定者は変わることがあります。">実施担当予定者の指名は承ることができません。また、当日の体調不良などにより実施担当予定者は変わることがあります。</p>
+            <p class="text-base speakable p-1 text-blue-600" data-speak-text="お問い合わせのみの方は、ウェブサイト最終ページに記載の、お問い合わせ専用のフォームをご利用ください。">※お問い合わせのみの方は、ウェブサイト最終ページに記載のお問い合わせ専用 of フォーラムをご利用ください。</p>
+        </div>
+
+        <form id="applicationForm" class="space-y-4" novalidate>
+
+            <!-- 1. Email Address -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <p class="text-base font-bold speakable p-1" data-speak-text="メールアドレス">メールアドレス</p>
+                <input type="email" id="email" placeholder="例：example@mail.com" aria-label="メールアドレス" required>
+            </div>
+
+            <!-- 2. Name -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <div class="flex justify-between items-center mb-1">
+                    <p class="text-base font-bold speakable p-1" data-speak-text="質問1、ご記入いただいている方のお名前をご記入ください。漢字でご記入の場合はフリガナも併記してください。">【１】ご記入いただいている方のお名前をご記入ください。</p>
+                </div>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="漢字でご記入の場合はフリガナも併記してください。">漢字でご記入の場合はフリガナも併記してください。</p>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="例 ︰ 千代田 花子、チヨダ ハナコ">例 ︰ 千代田 花子（チヨダ ハナコ）</p>
+                <!-- 🎤 お名前入力欄に音声入力ボタンを右端埋め込みで設置 -->
+                <div class="relative">
+                    <input type="text" id="name" placeholder="名前" aria-label="名前" required class="pr-28">
+                    <button type="button" onclick="startVoiceInput(this)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-md text-xs font-bold flex items-center space-x-1 border border-blue-200 transition shrink-0">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                        <span>音声入力</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. Child's Date of Birth -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <p class="text-base font-bold speakable p-1" data-speak-text="質問2、お子様の生年月日をご記入ください。お申し込み時点で小学1年生以上を対象とします。">【２】お子様の生年月日をご記入ください。</p>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="お申し込み時点で小学1年生以上を対象とします。">お申し込み時点で小学1年生以上を対象とします。</p>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="お子様のお名前は、日時が決定してから、当日の緊急連絡先などとともに、お知らせいただきます。">※お子様のお名前は、日時が決定してから、当日の緊急連絡先などとともに、お知らせいただきます。</p>
+                <input type="date" id="dob" aria-label="お子様の生年月日" required>
+            </div>
+
+            <!-- 4. Reading Condition -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <!-- 🎤 質問タイトルの右横に音声入力ボタンを設置 -->
+                <div class="flex justify-between items-center">
+                    <p class="text-base font-bold speakable p-1" data-speak-text="質問3、お子様の現在の読みの様子をご記入ください。検査内容ご提案の参考にします。">【３】お子様の現在の「読み」の様子をご記入ください。</p>
+                    <button type="button" onclick="startVoiceInput(this)" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-md text-xs font-bold flex items-center space-x-1 border border-blue-200 transition shrink-0 ml-2">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                        <span>音声入力</span>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="検査内容ご提案の参考にします。">検査内容ご提案の参考にします。</p>
+                <textarea id="reading_condition" rows="4" aria-label="読みの様子" required></textarea>
+            </div>
+
+            <!-- 5. Writing Condition -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <!-- 🎤 質問タイトルの右横に音声入力ボタンを設置 -->
+                <div class="flex justify-between items-center">
+                    <p class="text-base font-bold speakable p-1" data-speak-text="質問4、お子様の現在の書きの様子をご記入ください。検査内容ご提案の参考にします。">【４】お子様の現在の「書き」の様子をご記入ください。</p>
+                    <button type="button" onclick="startVoiceInput(this)" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-md text-xs font-bold flex items-center space-x-1 border border-blue-200 transition shrink-0 ml-2">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                        <span>音声入力</span>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="検査内容ご提案の参考にします。">検査内容ご提案の参考にします。</p>
+                <textarea id="writing_condition" rows="4" aria-label="書きの様子" required></textarea>
+            </div>
+
+            <!-- 6. Consultation History -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <!-- 🎤 質問タイトルの右横に音声入力ボタンを設置 -->
+                <div class="flex justify-between items-center">
+                    <p class="text-base font-bold speakable p-1" data-speak-text="質問5、これまで他の機関で読み書きについてご相談されたり、支援や検査を受けられたりしたことがあれば、そこでの結果や助言などを、差し支えのない範囲でご記入ください。ご相談そのものが初めての場合は、初めての相談とご記入ください。">【５】これまで他の機関で読み書きについてご相談されたり、支援や検査を受けられたりしたことがあれば、そこでの結果や助言などを、差し支えのない範囲でご記入ください。</p>
+                    <button type="button" onclick="startVoiceInput(this)" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-md text-xs font-bold flex items-center space-x-1 border border-blue-200 transition shrink-0 ml-2">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                        <span>音声入力</span>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="検査内容ご提案の参考にします。">検査内容ご提案の参考にします。</p>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="ご相談そのものが初めての場合は、初めての相談とご記入ください。">ご相談そのものが初めての場合は【初めての相談】とご記入ください。</p>
+                <textarea id="consultation_history" rows="4" aria-label="これまでの相談歴" required></textarea>
+            </div>
+
+            <!-- 7. Location Confirmation -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <p class="text-base font-bold speakable p-1" data-speak-text="質問6、実施場所の確認です。住所は、郵便番号102-0075、東京都千代田区三番町7の1、朝日三番町プラザ314となります。">【６】実施場所の確認です。下記となります。</p>
+                <p class="text-base speakable p-1" data-speak-text="郵便番号102-0075、東京都千代田区三番町7の1、朝日三番町プラザ314">〒102-0075<br>東京都千代田区三番町7－1<br>朝日三番町プラザ314</p>
+                <div class="pt-4">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="locationCheck" aria-label="実施場所を確認しました。" required>
+                        <label for="locationCheck" class="text-base cursor-pointer speakable p-1" data-speak-text="実施場所を確認しました。">実施場所を確認しました。</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Price Confirmation -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <p class="text-base font-bold speakable p-1" data-speak-text="質問7、内容と料金についてです。下記の内容を含めて27500円です。事前のやりとり、検査の実施、報告書の作成とお渡し、オンライン面談によるフィードバック、面談後に生じた質問のご対応。">【７】内容と料金についてです。下記の内容を含めて27500円です。</p>
+                <ul class="list-disc pl-5 space-y-1 text-sm text-gray-600">
+                    <li class="speakable p-1" data-speak-text="事前のやりとり">事前のやりとり</li>
+                    <li class="speakable p-1" data-speak-text="検査の実施">検査の実施</li>
+                    <li class="speakable p-1" data-speak-text="報告書の作成とお渡し。データ、紙、どちらでも可能です。">報告書の作成とお渡し（データ、紙、どちらでも可）</li>
+                    <li class="speakable p-1" data-speak-text="オンライン面談によるフィードバック。対面をご希望の場合はご相談ください。">オンライン面談によるフィードバック（対面をご希望の場合はご相談ください）</li>
+                    <li class="speakable p-1" data-speak-text="面談後に生じた質問のご対応。メールで受付となります。">面談後に生じた質問のご対応（メールで受付となります）</li>
+                </ul>
+                <div class="pt-4">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="priceCheck" aria-label="内容と料金について確認しました。" required>
+                        <label for="priceCheck" class="text-base cursor-pointer speakable p-1" data-speak-text="内容と料金について確認しました。">内容と料金について確認しました。</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. Invoice Confirmation -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <p class="text-base font-bold speakable p-1" data-speak-text="質問8、ご請求書の送付時期、送付先、お支払い方法についてです。ご請求書はフィードバック終了後、メールでお送りします。他機関からお勧めされた場合には、費用の負担先を検査実施日までにご確認ください。お支払い方法は銀行振り込みとなります。">【８】ご請求書の送付時期、送付先、お支払い方法についてです。</p>
+                <ul class="list-disc pl-5 space-y-1 text-sm text-gray-600">
+                    <li class="speakable p-1" data-speak-text="ご請求書は、オンライン面談でのフィードバック終了後、検査実施担当者より、ご指定のアドレスへ送信いたします。">ご請求書は、オンライン面談でのフィードバック終了後、検査実施担当者より、ご指定のアドレスへ送信いたします。</li>
+                    <li class="speakable p-1" data-speak-text="スクリーニング検査について公的機関を含め、他機関からお勧めされた場合には、費用の負担先を検査実施日までにご確認ください。">スクリーニング検査について公的機関を含め、他機関からお勧めされた場合には、費用の負担先（ご請求書の送付先）を検査実施日までにご確認ください。</li>
+                    <li class="speakable p-1" data-speak-text="お支払い方法は銀行振り込みとなります。">お支払い方法は銀行振り込みとなります。</li>
+                </ul>
+                <div class="pt-4">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="invoiceCheck" aria-label="ご請求書送付時期、送付先、お支払い方法について確認しました。" required>
+                        <label for="invoiceCheck" class="text-base cursor-pointer speakable p-1" data-speak-text="ご請求書送付時期、送付先、お支払い方法について確認しました。">ご請求書送付時期、送付先、お支払い方法について確認しました。</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. Desired Dates -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <p class="text-base font-bold speakable p-1" data-speak-text="質問9、ご希望の日時について。ご希望の日時を4つまで選択してください。午前とは原則10時15分から12時15分となりますが、9時半から12時半の間でご相談可能です。中学生までのお子様は、原則送迎をお願いいたします。待合室はございませんが同席は可能です。">【９】ご希望の日時について</p>
+                 <div class="pl-4 space-y-1 text-sm text-gray-600">
+                    <p class="speakable p-1" data-speak-text="ご希望の日時を4つまで選択してください。">・ご希望の日時を4つまで選択してください。</p>
+                    <p class="speakable p-1" data-speak-text="午前とは、原則10時15分から12時15分となりますが、9時半から12時半の間でご相談可能です。">・「午前」とは、原則10時15分〜12時15分となりますが、9時半〜12時半の間でご相談可能です。</p>
+                    <p class="speakable p-1" data-speak-text="中学生までのお子様は、原則送迎をお願いいたします。">・中学生までのお子様は、原則送迎をお願いいたします。</p>
+                    <p class="speakable p-1" data-speak-text="小さなお部屋のため、待合室はございませんが、お子様の様子によって同席は可能です。">・小さなお部屋のため、待合室はございませんが、お子様の様子によって同席は可能です。</p>
+                    <p class="speakable p-1" data-speak-text="ご予約が確定した日時は削除されています。">・ご予約が確定した日時は削除されています。</p>
+                </div>
+                <!-- 💡 この中身がスプレッドシートのデータをもとに自動で書き換わります -->
+                <div id="date-options" class="space-y-1 pt-4">
+                    <p class="text-sm text-gray-500 animate-pulse">日程を読み込み中...</p>
+                </div>
+            </div>
+
+            <!-- 11. Questions / Requests -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <!-- 🎤 質問タイトルの右横に音声入力ボタンを設置 -->
+                <div class="flex justify-between items-center">
+                    <p class="text-base font-bold speakable p-1" data-speak-text="質問10、ご質問や時間帯の細かなご希望などがございましたら、ご記入ください。ない場合は、なし、とご記入ください。">【１０】ご質問や時間帯の細かなご希望などがございましたら、ご記入ください。</p>
+                    <button type="button" onclick="startVoiceInput(this)" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-md text-xs font-bold flex items-center space-x-1 border border-blue-200 transition shrink-0 ml-2">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                        <span>音声入力</span>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="ない場合は「なし」とご記入ください。">ない場合は「なし」とご記入ください。</p>
+                <textarea id="questions" rows="4" aria-label="ご質問や時間帯の細かなご希望" required></textarea>
+            </div>
+
+            <!-- 12. Cancellation Policy -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <p class="text-base font-bold speakable p-1" data-speak-text="質問11、キャンセルについてです。ご都合がつかなくなった時点でご連絡ください。当日午前7時までのご連絡ならキャンセル料は発生しません。当日午前7時以降 of 連絡となった場合はキャンセル料金2750円が発生します。改めて別日時でのご相談は可能です。">【１１】キャンセルについてです。</p>
+                <ul class="list-disc pl-5 space-y-1 text-sm text-gray-600">
+                    <li class="speakable p-1" data-speak-text="ご都合がつかなくなった時点で、ご連絡ください。">ご都合がつかなくなった時点で、ご連絡ください。</li>
+                    <li class="speakable p-1" data-speak-text="ご予約当日午前7時までにご連絡いただいた場合には、キャンセル料金は発生しません。">ご予約当日当日午前7時までにご連絡いただいた場合には、キャンセル料金は発生しません。</li>
+                    <li class="speakable p-1" data-speak-text="ご予約当日午前7時以降の連絡となった場合には、キャンセル料金が2750円発生します。検査実施予定者の移動や準備などが始まっている時間帯のためです。">ご予約当日当日午前7時以降の連絡となった場合には、キャンセル料金が2750円発生します（検査実施予定者の移動や準備などが始まっている時間帯のためです）。</li>
+                    <li class="speakable p-1" data-speak-text="改めて別日時でご相談いただくことは可能です。">改めて別日時でご相談いただくことは可能です。</li>
+                </ul>
+                <p class="text-xs text-gray-500 mt-2 speakable p-1" data-speak-text="2025年6月22日以降にこのフォームにご回答いただいた方から適用となります。">※2025年6月22日以降にこのフォームにご回答いただいた方から適用となります。</p>
+                <div class="pt-4">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="cancelCheck" aria-label="キャンセルのルールについて確認しました。" required>
+                        <label for="cancelCheck" class="text-base cursor-pointer speakable p-1" data-speak-text="キャンセルのルールについて確認しました。">キャンセルのルールについて確認しました。</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 13. Source of Information -->
+            <div class="form-section bg-white rounded-lg p-4 space-y-2 border border-gray-200 shadow-sm">
+                <p class="text-base font-bold speakable p-1" data-speak-text="質問12、有限責任事業組合ちよだ子どものアせんト研究会クラップのことを知っていただいた経緯を教えていただけますでしょうか。複数選択可能です。">【１２】有限責任事業組合ちよだ・子どものアセスメント研究会（CLAP ︰ Chiyoda Language Assessment Pathway）のことを知っていただいた経緯を教えていただけますでしょうか。</p>
+                <p class="text-sm text-gray-500 speakable p-1" data-speak-text="複数選択可能です。">複数選択可能です。</p>
+                <div class="space-y-1">
+                    <div class="flex items-center space-x-2"><input type="checkbox" name="source" id="source1" aria-label="X（エックス）・旧Twitter（ツイッター）"><label for="source1" class="text-base cursor-pointer speakable p-1" data-speak-text="エックス、旧ツイッター">Ｘ（エックス）・旧Twitter（ツイッター）</label></div>
+                    <div class="flex items-center space-x-2"><input type="checkbox" name="source" id="source2" aria-label="Instagram（インスタグラム）"><label for="source2" class="text-base cursor-pointer speakable p-1" data-speak-text="インスタグラム">Instagram（インスタグラム）</label></div>
+                    <div class="flex items-center space-x-2"><input type="checkbox" name="source" id="source3" aria-label="周囲の方からのご紹介"><label for="source3" class="text-base cursor-pointer speakable p-1" data-speak-text="周囲の方からのご紹介">周囲の方からのご紹介</label></div>
+                    <div class="flex items-center space-x-2"><input type="checkbox" name="source" id="source4" aria-label="その他"><label for="source4" class="text-base cursor-pointer speakable p-1" data-speak-text="その他">その他</label></div>
+                </div>
+            </div>
+
+            <div class="flex justify-center mt-8">
+                <button type="submit" id="submit-btn" class="submit-btn bg-blue-600 text-white px-8 py-3 rounded-full shadow-md hover:bg-blue-700 transition duration-300">送信</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // --- Googleフォーム連携設定 ---
+        const FORM_ID = '1FAIpQLSf7tA8JpCQf7iZyxMonSpAOLi__ztzkud2Ci8yCW8qxxSNsRg'; 
+        const FORM_URL = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
+
+        // --- 📊 スプレッドシート日程同期用URL ---
+        const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTPLSSPCofwpwWDoV9d70Xvam26vKgjlDV9pySUVuPsv9xHHnvwGvyUAlFm-H2gRvWypGGBe6GzpniB/pub?gid=2050836358&single=true&output=csv'; 
+
+        // デフォルトの26日程（スプレッドシートが取得できない、またはオフラインの際のフォールバック用）
+        const DEFAULT_DATES = [
+            "7月4日（土）", "7月5日（日）", "7月6日（月）", "7月20日（月・祝）",
+            "8月1日（土）", "8月2日（土）", "8月3日（月）", "8月11日（火・祝）",
+            "9月5日（土）", "9月6日（日）", "9月7日（月）", "9月21日（月・祝）",
+            "9月22日（火・祝）", "9月23日（水・祝）", "10月3日（土）", "10月4日（日）",
+            "10月5日（月）", "10月12日（月・祝）", "11月2日（月）", "11月3日（火・祝）",
+            "11月7日（土）", "11月8日（日）", "11月23日（月）・祝", "12月5日（土）",
+            "12月6日（日）", "12月7日（月）"
+        ];
+
+        // 各質問項目に対応するGoogleフォーム内部ID（entry.XXXXXX）
+        const FORM_MAPPING = {
+            email: 'entry.1950259036',              // メールアドレス
+            name: 'entry.1843602536',               // 【１】お名前
+            dob: 'entry.157979592',                 // 【２】お子様の生年月日 (YYYY-MM-DD)
+            reading_condition: 'entry.1206735309',  // 【３】読みの様子
+            writing_condition: 'entry.1698923715',  // 【４】書きの様子
+            consultation_history: 'entry.996347535', // 【５】これまでの相談歴
+            locationCheck: 'entry.802177864',       // 【６】実施場所を確認しました (チェック状態)
+            priceCheck: 'entry.1897689306',         // 【７】内容と料金について確認しました (チェック状態)
+            invoiceCheck: 'entry.1109692263',       // 【８】ご請求書送付時期、送付先、お支払い方法について確認しました (チェック状態)
+            dates: 'entry.328583387',               // 【９】ご希望の日時 (複数選択時、改行区切りで送信)
+            questions: 'entry.459246934',           // 【１０】ご質問や時間帯の細かなご希望
+            cancelCheck: 'entry.2049543080',        // 【１１】キャンセルのルールについて確認しました (チェック状態)
+            sources: 'entry.1118130070'              // 【１２】知っていただいた経緯
+        };
+        
+        // --- DOM Elements ---
+        const form = document.getElementById('applicationForm');
+        const submitButton = document.getElementById('submit-btn');
+        const messageBox = document.getElementById('messageBox');
+        const messageContent = document.getElementById('messageContent');
+        const dateOptionsContainer = document.getElementById('date-options');
+
+        // --- Message Box Functions ---
+        function showMessageBox(message) {
+            messageContent.innerHTML = message;
+            
+            // HTMLタグ（<br>など）を除去してプレーンなよみあげテキストを用意する
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = message;
+            const plainText = tempDiv.innerText || tempDiv.textContent;
+            
+            // data-speak-text属性を動的にセットして、クリックでも読み直せるようにする
+            messageContent.setAttribute('data-speak-text', plainText);
+            
+            // メッセージボックスを表示
+            messageBox.classList.remove('hidden');
+
+            // 表示後、ただちに自動で音声読み上げを開始する
+            speakAndHighlight(messageContent);
+        }
+
+        function hideMessageBox() {
+            messageBox.classList.add('hidden');
+            
+            // メッセージボックスを閉じた際、読み上げ中なら強制停止する
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.cancel();
+                } catch (e) {}
+            }
+            if (currentHighlightedElement) {
+                currentHighlightedElement.classList.remove('highlight');
+                currentHighlightedElement = null;
+            }
+        }
+
+        // --- Speech Recognition (ダイアログ不要の直接入力型 音声入力システム) ---
+        let activeRecognition = null; 
+        let activeTargetButton = null;
+        let originalButtonHTML = "";
+        let originalInputValue = ""; // 録音開始時の入力欄の初期値を保持
+
+        function startVoiceInput(button) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                showMessageBox('お使いのブラウザや現在のアクセス環境は音声入力に対応していません。');
+                return;
+            }
+
+            const targetInput = button.closest('.form-section').querySelector('textarea, input[type="text"]');
+            if (!targetInput) return;
+
+            // すでに自分が起動している場合は、クリックで「停止（決定）」にする
+            if (activeRecognition && activeTargetButton === button) {
+                stopActiveRecognition();
+                return;
+            }
+
+            // 他の入力欄でマイクが起動している場合は一度全て停止する
+            if (activeRecognition) {
+                stopActiveRecognition();
+            }
+
+            // ボタン表示を入力中（赤いドットと完了指示）に切り替える
+            activeTargetButton = button;
+            originalButtonHTML = button.innerHTML;
+            button.innerHTML = `
+                <span class="flex items-center space-x-1 text-red-600 animate-pulse font-bold">
+                    <span class="h-2.5 w-2.5 rounded-full bg-red-600"></span>
+                    <span>停止して決定</span>
+                </span>
+            `;
+            button.classList.remove('bg-blue-50', 'text-blue-600');
+            button.classList.add('bg-red-50', 'border-red-200');
+
+            // 開始時点の入力欄の値を記憶（これの末尾に音声認識結果を追加していく）
+            originalInputValue = targetInput.value.trim();
+
+            let localRecognition;
+            try {
+                localRecognition = new SpeechRecognition();
+                localRecognition.lang = 'ja-JP';
+                localRecognition.interimResults = true; // リアルタイムで中間テキストも表示
+                localRecognition.continuous = true;     // 連続聞き取りモード（途切れ防止）
+                localRecognition.maxAlternatives = 1;
+            } catch (e) {
+                console.error('SpeechRecognition creation failed:', e);
+                showMessageBox('音声入力エンジンの起動に失敗しました。');
+                resetButtonState(button);
+                return;
+            }
+
+            activeRecognition = localRecognition;
+
+            let finalTranscriptAccumulator = ""; // 確定した文章の蓄積
+
+            localRecognition.onresult = (event) => {
+                let interimTranscript = '';
+                let newFinalTranscript = '';
+
+                // event.results から、新しく確定したテキストと中間テキストを仕分ける
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        newFinalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+
+                if (newFinalTranscript) {
+                    finalTranscriptAccumulator += newFinalTranscript;
+                }
+
+                // 確定された文字 ＋ 現在話している最中の文字
+                const currentText = (finalTranscriptAccumulator + interimTranscript).trim();
+
+                // 入力欄に直接、リアルタイムに流し込む（開始前の元々の文字に、今回話した文字を連結してセット）
+                if (currentText) {
+                    targetInput.value = originalInputValue 
+                        ? originalInputValue + " " + currentText 
+                        : currentText;
+                    
+                    // inputイベントを強制的に発火させて枠線のエラー表示などを自動更新
+                    targetInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            };
+
+            localRecognition.onerror = (event) => {
+                // ユーザー自身による意図的な中断(aborted)の場合はエラーを表示しません
+                if (event.error !== 'aborted') {
+                    console.error('Speech recognition error:', event.error);
+                }
+                
+                if (event.error === 'not-allowed') {
+                    showMessageBox("マイクの許可が得られませんでした。ブラウザの設定でマイクを許可してください。");
+                }
+            };
+
+            localRecognition.onend = () => {
+                resetButtonState(button);
+                if (activeRecognition === localRecognition) {
+                    activeRecognition = null;
+                    activeTargetButton = null;
+                }
+            };
+
+            try {
+                localRecognition.start();
+            } catch (e) {
+                console.error("Speech recognition start failed:", e);
+                resetButtonState(button);
+                activeRecognition = null;
+                activeTargetButton = null;
+            }
+        }
+
+        // 音声認識を安全に停止・リセットする処理
+        function stopActiveRecognition() {
+            if (activeRecognition) {
+                try {
+                    // abortedエラーがコンソールに流れるのを完全に防止するためハンドラをクリアしてから停止します
+                    activeRecognition.onerror = null;
+                    activeRecognition.onend = null;
+                    activeRecognition.stop();
+                } catch (e) {}
+                if (activeTargetButton) {
+                    resetButtonState(activeTargetButton);
+                }
+                activeRecognition = null;
+                activeTargetButton = null;
+            }
+        }
+
+        // ボタンの表示スタイルを元に戻す共通処理
+        function resetButtonState(button) {
+            if (button && originalButtonHTML) {
+                button.innerHTML = originalButtonHTML;
+                button.disabled = false;
+                button.classList.remove('bg-red-50', 'border-red-200');
+                button.classList.add('bg-blue-50', 'text-blue-600');
+            }
+        }
+
+        // --- Text-to-Speech (安定化 & ブラウザ衝突回避型) ---
+        let activeUtterances = []; // メモリ解放(GC)による読み上げ強制中断を防止する配列
+        let currentHighlightedElement = null; // 現在ハイライトされているHTML要素
+        let isSpeechUnlocked = false; // 音声エンジン有効化フラグ
+        let speechTimeout = null; // 新規再生開始用のタイマー
+
+        // 最初のユーザージェスチャーで無音音声を再生し、ブラウザの音声再生ブロックを自動解除（アンロック）する
+        function unlockSpeechSynthesis() {
+            if (isSpeechUnlocked) return;
+            if ('speechSynthesis' in window) {
+                try {
+                    const silentUtterance = new SpeechSynthesisUtterance('');
+                    silentUtterance.volume = 0;
+                    window.speechSynthesis.speak(silentUtterance);
+                    isSpeechUnlocked = true;
+                    console.log("Speech synthesis unlocked successfully.");
+                } catch (e) {
+                    console.warn("Speech synthesis activation failed:", e);
+                }
+            }
+        }
+
+        function speakAndHighlight(element) {
+            if (!('speechSynthesis' in window)) {
+                console.warn('speechSynthesis not supported in this browser.');
+                return;
+            }
+
+            // 前回予定していた読み上げタスクがあれば強制クリア
+            if (speechTimeout) {
+                clearTimeout(speechTimeout);
+            }
+
+            // すべての既存発話を停止し、一時停止バグによるフリーズを確実に解除する
+            try {
+                window.speechSynthesis.cancel();
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            } catch (e) {
+                console.error("Speech cancel/resume error:", e);
+            }
+
+            // 既に他の要素がハイライトされていれば、そのハイライトを一度リセット
+            if (currentHighlightedElement) {
+                currentHighlightedElement.classList.remove('highlight');
+            }
+
+            // 読み上げるテキストの抽出
+            const textToSpeak = element.getAttribute('data-speak-text') || element.innerText.trim();
+            if (!textToSpeak) return;
+
+            // cancel() の直後に speak() を呼ぶことによるブラウザのバグを防ぐため、100msの微小なディレイを挟みます。
+            speechTimeout = setTimeout(() => {
+                // よみがな変換用の簡易辞書・フィルタ処理
+                let processedText = textToSpeak.replace(/三番町7－1/g, 'さんばんちょう ななの いち')
+                                               .replace(/三番町7-1/g, 'さんばんちょう ななの いち')
+                                               .replace(/朝日三番町/g, 'あさひさんばんちょう')
+                                               .replace(/兼城/g, 'かねしろ')
+                                               .replace(/松浦千春/g, 'まつうらちはる')
+                                               .replace(/ご記入いただいている方/g, 'ごきにゅういただいているかた')
+                                               .replace(/ご回答いただいた方から/g, 'ごかいとういただいたかたから')
+                                               .replace(/有限責任事業組合/g, 'ゆうげんせきにんじぎょうくみあい')
+                                               .replace(/CLAP/g, 'クラップ')
+                                               .replace(/^※/, '')
+                                               .replace(/^・/, '');
+
+                const utterance = new SpeechSynthesisUtterance(processedText);
+                utterance.lang = 'ja-JP';
+
+                // 日本語音声が利用可能な場合は優先的に設定
+                try {
+                    const voices = window.speechSynthesis.getVoices();
+                    if (voices && voices.length > 0) {
+                        const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang === 'ja_JP');
+                        if (jpVoice) {
+                            utterance.voice = jpVoice;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Failed to apply voice configuration, using default browser voice:", e);
+                }
+
+                // ガベコレ（GC）による再生中の突然停止を防ぐため配列に保持
+                activeUtterances.push(utterance);
+                
+                // クリックされたテキストをクリーム色にハイライト
+                currentHighlightedElement = element;
+                element.classList.add('highlight');
+
+                // 再生完了時にハイライトを消去
+                utterance.onend = () => {
+                    element.classList.remove('highlight');
+                    activeUtterances = activeUtterances.filter(u => u !== utterance);
+                    if (currentHighlightedElement === element) {
+                        currentHighlightedElement = null;
+                    }
+                };
+
+                // キャンセルなどの通常の中断エラーでのハイライトクリア処理
+                utterance.onerror = (event) => {
+                    if (event.error !== 'interrupted' && event.error !== 'not-allowed') {
+                        console.warn("Speech synthesis info:", event.error || "interrupted");
+                    }
+                    
+                    element.classList.remove('highlight');
+                    activeUtterances = activeUtterances.filter(u => u !== utterance);
+                    if (currentHighlightedElement === element) {
+                        currentHighlightedElement = null;
+                    }
+                };
+
+                // 発声スタート
+                try {
+                    window.speechSynthesis.speak(utterance);
+                } catch (e) {
+                    console.error("Speech Synthesis speak command failed:", e);
+                    element.classList.remove('highlight');
+                }
+            }, 100); // 100ミリ秒のバグ回避ディレイ
+        }
+
+        // --- 📊 スプレッドシートからの日程読み込み・描画処理 ---
+        async function loadDates() {
+            let dates = DEFAULT_DATES; // デフォルトを代入しておく
+
+            if (SPREADSHEET_CSV_URL && SPREADSHEET_CSV_URL.trim() !== "") {
+                try {
+                    const response = await fetch(SPREADSHEET_CSV_URL);
+                    if (!response.ok) throw new Error("HTTP error " + response.status);
+                    
+                    const csvText = await response.text();
+                    
+                    // CSVデータをパース（行ごとに分割して無駄な空白やクォーテーションをトリム）
+                    const parsedDates = csvText
+                        .split(/\r?\n/)
+                        .map(line => line.replace(/^"|"$/g, '').trim())
+                        .filter(line => line.length > 0);
+                    
+                    if (parsedDates.length > 0) {
+                        dates = parsedDates;
+                    }
+                } catch (error) {
+                    console.warn("スプレッドシートからの日程読み込みに失敗しました。デフォルト日程を表示します。:", error);
+                }
+            }
+
+            // HTMLにチェックボックスのリストを出力
+            renderDates(dates);
+        }
+
+        // 日程チェックボックスをDOM上にレンダリング
+        function renderDates(datesArray) {
+            dateOptionsContainer.innerHTML = ""; // 読み込み中のインジケーターを消去
+            
+            datesArray.forEach((dateText, index) => {
+                const uniqueId = `date_dynamic_${index}`;
+                
+                const div = document.createElement('div');
+                div.className = "flex items-center space-x-2";
+                
+                // チェックボックスの作成
+                const input = document.createElement('input');
+                input.type = "checkbox";
+                input.name = "date_option";
+                input.id = uniqueId;
+                input.setAttribute("aria-label", dateText);
+                
+                // ラベルの作成
+                const label = document.createElement('label');
+                label.htmlFor = uniqueId;
+                label.className = "text-base cursor-pointer speakable p-1";
+                label.setAttribute("data-speak-text", dateText);
+                label.textContent = dateText;
+                
+                div.appendChild(input);
+                div.appendChild(label);
+                dateOptionsContainer.appendChild(div);
+            });
+        }
+
+        // --- Event Listeners Setup ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 最初の日程リスト読み込み処理を実行
+            loadDates();
+
+            // 最初のユーザージェスチャーで自動アンロック処理を実行
+            document.addEventListener('click', unlockSpeechSynthesis, { once: true });
+            document.addEventListener('touchstart', unlockSpeechSynthesis, { once: true });
+
+            // お申し込み送信処理のリスナー登録
+            form.addEventListener('submit', handleFormSubmit);
+
+            // 日時チェックボックスの選択上限（4つまで）
+            dateOptionsContainer.addEventListener('change', (event) => {
+                if (event.target.type === 'checkbox') {
+                    const checkedBoxes = dateOptionsContainer.querySelectorAll('input[name="date_option"]:checked');
+                    if (checkedBoxes.length > 4) {
+                        event.target.checked = false;
+                        showMessageBox('ご希望の日時は4つまで選択できます。');
+                    }
+                }
+            });
+
+            // 音声リストの事前ロード
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.getVoices();
+                    window.speechSynthesis.onvoiceschanged = () => {
+                        window.speechSynthesis.getVoices();
+                    };
+                } catch (e) {
+                    console.warn("SpeechSynthesis preparation failed:", e);
+                }
+            }
+
+            // 📢 イベントデリゲーションによる読み上げクリック処理
+            document.addEventListener('click', (event) => {
+                const speakableElement = event.target.closest('.speakable');
+                if (speakableElement) {
+                    event.stopPropagation();
+                    speakAndHighlight(speakableElement);
+                }
+            });
+        });
+
+        // --- Form Validation ---
+        function validateForm() {
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            const errors = [];
+            const requiredFields = [
+                { id: 'email', name: 'メールアドレス' }, { id: 'name', name: 'お名前' },
+                { id: 'dob', name: 'お子様の生年月日' }, { id: 'reading_condition', name: '「読み」の様子' },
+                { id: 'writing_condition', name: '「書き」の様子' }, { id: 'consultation_history', name: 'これまでの相談歴' },
+                { id: 'questions', name: 'ご質問' }
+            ];
+            requiredFields.forEach(field => {
+                const element = document.getElementById(field.id);
+                if (!element.value.trim()) {
+                    errors.push(`${field.name}を入力してください。`);
+                    element.classList.add('error');
+                }
+            });
+
+            const emailField = document.getElementById('email');
+            if (emailField.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value.trim())) {
+                errors.push('有効なメールアドレスを入力してください。');
+                emailField.value.trim();
+                emailField.classList.add('error');
+            }
+
+            const requiredChecks = [
+                { id: 'locationCheck', name: '実施場所の確認' }, { id: 'priceCheck', name: '内容と料金の確認' },
+                { id: 'invoiceCheck', name: 'ご請求書送付の確認' }, { id: 'cancelCheck', name: 'キャンセルの確認' }
+            ];
+            requiredChecks.forEach(check => {
+                const element = document.getElementById(check.id);
+                if (!element.checked) {
+                    errors.push(`${check.name}をしてください。`);
+                    element.closest('div').querySelector('label').classList.add('error');
+                }
+            });
+            if (document.querySelectorAll('input[name="date_option"]:checked').length === 0) {
+                errors.push('ご希望の日時を1つ以上選択してください。');
+                dateOptionsContainer.classList.add('error');
+            }
+            return errors;
+        }
+
+        // --- Form Submission (Google Forms integration) ---
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const errors = validateForm();
+            if (errors.length > 0) {
+                showMessageBox('入力内容にエラーがあります:<br><br>・' + errors.join('<br>—'));
+                const firstErrorField = document.querySelector('.error');
+                if (firstErrorField) firstErrorField.focus();
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = '送信中...';
+
+            const selectedDates = Array.from(document.querySelectorAll('input[name="date_option"]:checked')).map(cb => cb.parentElement.querySelector('label').textContent);
+            const selectedSources = Array.from(document.querySelectorAll('input[name="source"]:checked')).map(cb => cb.parentElement.querySelector('label').textContent);
+
+            // Googleフォーム送信パラメータの作成
+            const formData = new URLSearchParams();
+            
+            // 各フォームコントロールに入力された値をGoogleフォーム用マッピングに設定
+            formData.append(FORM_MAPPING.email, document.getElementById('email').value.trim());
+            formData.append(FORM_MAPPING.name, document.getElementById('name').value.trim());
+            formData.append(FORM_MAPPING.dob, document.getElementById('dob').value.trim());
+            formData.append(FORM_MAPPING.reading_condition, document.getElementById('reading_condition').value.trim());
+            formData.append(FORM_MAPPING.writing_condition, document.getElementById('writing_condition').value.trim());
+            formData.append(FORM_MAPPING.consultation_history, document.getElementById('consultation_history').value.trim());
+            formData.append(FORM_MAPPING.locationCheck, "実施場所を確認しました。");
+            formData.append(FORM_MAPPING.priceCheck, "内容と料金について確認しました。");
+            formData.append(FORM_MAPPING.invoiceCheck, "ご請求書送付時期、送付先、お支払い方法について確認しました。");
+            
+            // 複数選択された希望日時を改行（\n）区切りに変更しました。
+            formData.append(FORM_MAPPING.dates, selectedDates.join('\n'));
+            
+            formData.append(FORM_MAPPING.questions, document.getElementById('questions').value.trim());
+            formData.append(FORM_MAPPING.cancelCheck, "キャンセルのルールについて確認しました。");
+            formData.append(FORM_MAPPING.sources, selectedSources.join(', '));
+
+            try {
+                // mode: 'no-cors' で送信。
+                await fetch(FORM_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData
+                });
+                
+                // 送信完了メッセージ
+                const successMessageHTML = 'お申し込みありがとうございます。内容を確認し、1週間以内にご連絡いたします。ご入力いただいたメールアドレスに控えのメールを送信しました。';
+                
+                showMessageBox(successMessageHTML);
+                form.reset();
+                
+                // 日程リストを再ロード（送信後にチェックが外れた状態のリストを表示）
+                loadDates();
+
+            } catch (error) {
+                console.error('送信エラー詳細:', error);
+                showMessageBox(
+                    '送信中にエラーが発生しました。<br><br>' +
+                    '<span class="text-xs text-red-600 block text-left bg-red-50 p-2 rounded border border-red-200">' +
+                    '【エラー詳細】<br>' + error.message + '<br><br>' +
+                    '※インターネット通信状態、またはGoogleフォームの設定を確認してください。' +
+                    '</span>'
+                );
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = '送信';
+            }
+        }
+    </script>
+</body>
+</html>
